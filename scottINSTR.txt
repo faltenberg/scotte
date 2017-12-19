@@ -1,0 +1,74 @@
+ifetch:
+  bus1 = 1; rb_w = 1; pc_r = 1; ra_w = 1; op = 000; mar_w = 1;
+  rd_r = 1; pc_w = 1;
+  ram_r = 1; ir_w = 1; istate = 1; MUX = 011; ADDR = 0x00
+
+instrEnd:
+  istate = 1; MUX = 010; ADDR = 0x01
+
+
+0000: ldr (ldr ra, [rb]  ->  ra = [rb])
+  rx = rb; rx_r = 1; mar_w = 1;
+  rx = ra; rx_w = 1; ram_r = 1; END;
+
+0001: str (str ra, [rb]  ->  [rb] = ra)
+  rx = rb; rx_r = 1; mar_w = 1;
+  rx = ra; rx_r = 1; ram_w = 1; END;
+
+0010: data (data rb, imm  ->  rb = [pc++])
+  bus1 = 1; rb_w = 1; pc_r = 1; ra_w = 1; op = 000; mar_w = 1;
+  rd_r = 1; pc_w = 1;
+  rx = rb; rx_w = 1; ram_r = 1; END;
+
+0011: nop
+
+0100: jalr (jalr rb  ->  pc = rb)
+  rx = rb; rx_r = 1; ra_w = 1; rb_w = 1;
+  rx = rb; rx_w = 1; pc_r = 1;
+  rd_r = 1; pc_w = 1; op = 101; END;
+
+0101: j<cond> (j<cond> imm  ->  if <cond>: pc = [pc] else: pc++)
+  bus1 = 1; rb_w = 1; pc_r = 1; ra_w = 1; op = 000; mar_w = 1; MUX = 001; ADDR = jump;
+  continue: pc_w = 1; rd_r = 1; END;
+  jump:     pc_w = 1; ram_r = 1; END;
+
+0110: clf (if 0110 0000: 0  ->  flags else: halt)
+  NOTE: flags might be wrong if pc == 0xff but that shouldn't occur in practice
+  rd_r = 1; MUX = 100; ADDR = else;  // rd so bus is not empty
+  if:   pc_r = 1; ra_w = 1; bus1 = 1; rb_w = 1; op = 000; flag_w = 1; cin_w = 1; END;
+  else: halt = 1; END;  // jump to 0x00 so the machine is proper when resumed
+
+0111: io
+0111 00 rb: in  ra, data (ra = io.data)
+0111 01 rb: in  ra, addr (ra = io.addr)
+0111 10 rb: out ra, data (io.data = ra)
+0111 11 rb: out ra, addr (io.addr = ra)
+  io = 1; rx = ra;
+  pc_r = 1; END;  // instructions must have at least two microcodes so they can jump back to ifetch
+
+1000: add (add ra, rb  ->  ra = ra + rb + fr[c], fr=[c00z])
+  ra_w = 1; rx = ra; rx_r = 1;
+  rb_w = 1; rx = rb; rx_r = 1;
+  rx = ra; rx_w = 1; rd_r = 1; op = xxx; cin_r = 1; flag_w = 1;
+  rd_r = 1; cin_w = 1; END;  // read rd, so bus is not empty, for visual convenience
+
+1001: rolx (rolx ra, rb  ->  ra = rb << 1, fr[c]; fr=[c00z])
+1010: rorx (rorx ra, rb  ->  ra = fr[c], rb >> 1; fr=[c00z])
+  ra_w = 1; rx = rb; rx_r = 1;
+  rx = ra; rx_w = 1; rd_r = 1; op = xxx; cin_r = 1; flag_w = 1;
+  rd_r = 1; cin_w = 1; END;  // read rd, so bus is not empty, for visual convenience
+
+1011: not (not ra, rb  ->  ra = ~rb, fr=[000z])
+  ra_w = 1; rx = rb; rx_r = 1;
+  rx = ra; rx_w = 1; rd_r = 1; op = xxx; flag_w = 1; cin_w = 1; END;
+
+1100: and (and ra, rb  ->  ra = ra & rb, fr=[0_00z])
+1101: orr (orr ra, rb  ->  ra = ra | rb, fr=[000z])
+1110: xor (xor ra, rb  ->  ra = ra ^ rb, fr=[000z])
+  ra_w = 1; rx = ra; rx_r = 1;
+  rb_w = 1; rx = rb; rx_r = 1;
+  rx = ra; rx_w = 1; rd_r = 1; op = xxx; flag_w = 1; cin_w = 1; END;
+
+1111: cmp (cmp ra, rb  ->  ra - rb, fr=[0ge0])
+  ra_w = 1; rx = ra; rx_r = 1;
+  rb_w = 1; rx = rb; rx_r = 1; op = xxx; flag_w = 1; cin_w = 1; END;
