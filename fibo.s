@@ -39,31 +39,14 @@ end:
 0x18: 0x01          0000 0001
 0x19: str r1, [r0]  0001 0100   // ram[0x01] = f1
 0x1a: halt          0110 1111   // halt
-0000: ldr   ok
-0001: str   ok
-0010: data  ok
-0011: nop
-0100: jmpr  ok
-0101: br    ok
-0110: clf   ok
-0110: halt  ok
-0111: io
 
-1000: add   ok
-1001: shl   ok
-1010: shr   ok
-1011: not   ok
-1100: and   ok
-1101: orr   ok
-1110: xor   ok
-1111: cmp   ok
 
 // Runtime:
-// fibo(0) =  1, cycles:  9 -> 0x09, time (@16Hz): 0min30s
-// fibo(1) =  1, cycles:  9 -> 0x09, time (@16Hz): 0min30s
-// fibo(2) =  2, cycles: 23 -> 0x17, time (@16Hz): 1min10s
-// fibo(3) =  3, cycles: 37 -> 0x25, time (@16Hz): 1min50s
-// fibo(4) =  5, cycles: 51 -> 0x33, time (@16Hz): 2min30s
-// fibo(5) =  8, cycles: 65 -> 0x41, time (@16Hz): 3min15s
-// fibo(6) = 13, cycles: 79 -> 0x4f, time (@16Hz): 4min00s
-// fibo(7) = 21, cycles: 93 -> 0x5d, time (@16Hz): 4min45s
+// fibo(0) =  1  -  instructions = 0x09   9  -  time (@16Hz): 0min15s, 1.5s/instr
+// fibo(1) =  1  -  instructions = 0x09   9  -  time (@16Hz): 0min15s, 1.5s/instr
+// fibo(2) =  2  -  instructions = 0x17  23  -  time (@16Hz): 0min35s, 1.5s/instr
+// fibo(3) =  3  -  instructions = 0x25  37  -  time (@16Hz): 0min55s, 1.5s/instr
+// fibo(4) =  5  -  instructions = 0x33  51  -  time (@16Hz): 1min15s, 1.5s/instr
+// fibo(5) =  8  -  instructions = 0x41  65  -  time (@16Hz): 1min35s, 1.5s/instr
+// fibo(6) = 13  -  instructions = 0x4f  79  -  time (@16Hz): 2min00s, 1.5s/instr
+// fibo(7) = 21  -  instructions = 0x5d  93  -  time (@16Hz): 2min20s, 1.5s/instr
