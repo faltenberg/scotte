@@ -86,9 +86,9 @@ instrEnd:
   ISTATE = 1; MUX = 10; ADDR = 0x01
 
 
-0000: nop (nop  ->  pc = pc)
-  pc_r = 1; ra_w = 1;
-  rd_r = 1; pc_w = 1; op = 000; cin = 0; END;
+0000: mov (mov ra, rb  ->  ra = rb)
+  rx = rb; rx_r = 1; ra_w = 1;
+  rx = ra; rx_w = 1; rd_r = 1; op = 000; cin = 0; END;
 
 0001: data (data rb, imm8  ->  rb = ram[pc++])
   bus0 = 1; rb_w = 1; pc_r = 1; ra_w = 1;  mar_w = 1;
@@ -103,15 +103,16 @@ instrEnd:
   rx = rb; rx_r = 1; mar_w = 1;
   rx = ra; rx_r = 1; ram_w = 1; END;
 
-0100: jalr (jalr rb  ->  pc = rb)
+0100: jalr (jalr rb  ->  swap(pc, rb))
   pc_r = 1; ra_w = 1;
-  rx = rb; rb_r = 1; pc_w = 1;
-  rx = rb; rb_w = 1; rd_r = 1; op = 000; cin = 0; END;
+  rx = rb; rx_r = 1; pc_w = 1;
+  rx = rb; rx_w = 1; rd_r = 1; op = 000; cin = 0; END;
 
-0101: j<cond> (j<cond> imm8  ->  if <cond>: pc = ram[pc] else: pc++)
-  bus0 = 1; rb_w = 1; pc_r = 1; ra_w = 1; op = 100; cin = 1; mar_w = 1; MUX = 01; ADDR = jump;
-  continue: pc_w = 1; rd_r = 1; END;
-  jump:     pc_w = 1; ram_r = 1; END;
+0101: b<cond> (b<cond> imm8  ->  if <cond>: pc = pc+ram[pc] else: pc++)
+  pc_r = 1; ra_w = 1; mar_w = 1; MUX = 01; ADDR = jump;
+  continue: bus0 = 1; rb_w = 1; pc_w = 1; rd_r = 1; op = 100; cin = 1; END;
+  jump:     bus0 = 0; rb_w = 1; ram_r = 1;
+            pc_w = 1; rd_r = 1; op = 100; cin = 0; END;
 
 0110: halt (halt  ->  halt)
   halt = 1; END;  // jump to 0x00 so the machine is proper when resumed
