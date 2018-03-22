@@ -121,7 +121,7 @@ instrEnd:
 0111 00 rb: in  data, rb (rb = io[active].data)
 0111 01 rb: in  addr, rb (rb = io[active].addr)
 0111 10 rb: out data, rb (io[active].data = rb)
-0111 11 rb: out addr, rb (io[ra].active = true)
+0111 11 rb: out addr, rb (io[rb].active = true)
   io = 1; rx = rb;
 
 1000: add (add ra, rb  ->  ra = ra + rb, fr=[vcsz])
