@@ -57,7 +57,7 @@ Microprograms
 0011: str (str ra, [rb]  ->  ram[rb] = ra)
   mux_rb = reg; alu.op = mov; ram_w = 1;
 
-0100: jalr (jalr rb  ->  swap(pc, rb))
+0100: jalr (jalr ra  ->  swap(pc, ra))
   mux_rb = reg; alu.op = mov; mux_pc = alu; mux_rd = pc; reg_w = 1;
 
 0101: b<cond> (b<cond> imm8  ->  if <cond>: pc = pc+rom[pc] else: pc++)
@@ -88,3 +88,26 @@ Microprograms
 
 1111: cmp (cmp ra, rb  ->  ra - rb, fr=[vcsz])
   mux_ra = reg; mux_rb = reg; alu.op = sub; fr_w = 1;
+
+
+
+
+
+ok mov
+ok data
+ok ldr
+ok str
+ok jalr
+   br
+ok halt
+   in
+   out
+
+ok add
+ok sub
+ok shl
+ok shr
+ok and
+ok orr
+ok xor
+ok cmp

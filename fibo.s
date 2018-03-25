@@ -4,9 +4,9 @@
 // r2: f2
 // r3: n
 fibo:
-0x00: data r3       0001 0011   // load n
+0x00: data r3       0001 1100   // load n
 0x01: uint n        n=7
-0x02: data r1       0001 0001   // f1 = 1
+0x02: data r1       0001 0100   // f1 = 1
 0x03: uint 1        0000 0001
 0x04: mov  r2, r1   0000 1001   // f2 = 1
 
@@ -34,13 +34,22 @@ end:
 0x15: str  r1, [r0] 0011 0100   // ram[0x01] = f1
 0x16: halt          0110 0000   // halt
 
+// Runtime v3:
+// fibo(0) =  1 - instructions = 0x09  9 - time (@16Hz): 0min02s, 0.2s/instr
+// fibo(1) =  1 - instructions = 0x09  9 - time (@16Hz): 0min02s, 0.2s/instr
+// fibo(2) =  2 - instructions = 0x13 19 - time (@16Hz): 0min04s, 0.2s/instr
+// fibo(3) =  3 - instructions = 0x1d 29 - time (@16Hz): 0min05s, 0.2s/instr
+// fibo(4) =  5 - instructions = 0x27 39 - time (@16Hz): 0min07s, 0.2s/instr
+// fibo(5) =  8 - instructions = 0x31 49 - time (@16Hz): 0min09s, 0.2s/instr
+// fibo(6) = 13 - instructions = 0x3b 59 - time (@16Hz): 0min11s, 0.2s/instr
+// fibo(7) = 21 - instructions = 0x45 69 - time (@16Hz): 0min13s, 0.2s/instr
 
-// Runtime:
-// fibo(0) =  1  -  instructions = 0x09   9  -  time (@16Hz): 0min15s, 1.7s/instr
-// fibo(1) =  1  -  instructions = 0x09   9  -  time (@16Hz): 0min15s, 1.7s/instr
-// fibo(2) =  2  -  instructions = 0x13  19  -  time (@16Hz): 0min25s, 1.3s/instr
-// fibo(3) =  3  -  instructions = 0x1d  29  -  time (@16Hz): 0min40s, 1.4s/instr
-// fibo(4) =  5  -  instructions = 0x27  39  -  time (@16Hz): 0min55s, 1.4s/instr
-// fibo(5) =  8  -  instructions = 0x31  49  -  time (@16Hz): 1min05s, 1.3s/instr
-// fibo(6) = 13  -  instructions = 0x3b  59  -  time (@16Hz): 1min20s, 1.4s/instr
-// fibo(7) = 21  -  instructions = 0x45  69  -  time (@16Hz): 1min35s, 1.4s/instr
+// Runtime v2:
+// fibo(0) =  1 - instructions = 0x09  9 - time (@16Hz): 0min15s, 1.7s/instr
+// fibo(1) =  1 - instructions = 0x09  9 - time (@16Hz): 0min15s, 1.7s/instr
+// fibo(2) =  2 - instructions = 0x13 19 - time (@16Hz): 0min25s, 1.3s/instr
+// fibo(3) =  3 - instructions = 0x1d 29 - time (@16Hz): 0min40s, 1.4s/instr
+// fibo(4) =  5 - instructions = 0x27 39 - time (@16Hz): 0min55s, 1.4s/instr
+// fibo(5) =  8 - instructions = 0x31 49 - time (@16Hz): 1min05s, 1.3s/instr
+// fibo(6) = 13 - instructions = 0x3b 59 - time (@16Hz): 1min20s, 1.4s/instr
+// fibo(7) = 21 - instructions = 0x45 69 - time (@16Hz): 1min35s, 1.4s/instr
