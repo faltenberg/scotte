@@ -5,10 +5,11 @@ The ScottE is an 8bit processor based on Scott's CPU in his book
 ["But How Do It Know"](http://buthowdoitknow.com). It differers from the original in these points:
 
 1. Use of microcode instead of fixed logic as Control Unit.
+2. Completely reworked microarchitecture that removes the bus bottleneck of the original.
 2. Support for subtraction and hence different ALU flags.
-3. Modified instructions: ldr, str, jmp
-4. Removed instructions: not, clf, jmpr
-5. New instructions: sub, halt, mov
+3. Extended address space with memory-mapped IO.
+4. Stack support with the stack pointer register.
+5. Modified, removed and new instructions.
 
 Thus it is neither binary compatible nor semantically compatible with the original CPU.
 
