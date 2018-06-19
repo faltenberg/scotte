@@ -27,8 +27,8 @@ h:  halt
 m:  manual mode
 
 
-Addressing
-----------
+Address Space
+-------------
 
 ScottE v4 can address 1KB of memory. The address space has four 256B regions:
 0x000-0x0ff: ROM
@@ -205,20 +205,20 @@ instr:  |0101  cond|   imm8   |
 desc:   Conditionl branch. The address is calculated from PC and the offset stored in the next byte.
 macro:  if true: npc = pc+1 + rom[pc+1]  else: npc = pc+2
 micro:  branch = 1; pc_w = 1; mux_addr = pc; bus_en = 1; bus_ld/st = 0; mux_ra = pc; mux_rb = bus; aluop = add;
------+------+--------------+-----------------------------
-cond | bits | test         | description    
------+------+--------------+-----------------------------
-BR   | 0000 | true         | branch always
-BZS  | 0001 | z==1         | branch if zero flag set
-BSS  | 0010 | s==1         | branch if sign flag set
-BVS  | 0011 | v==1         | branch if overflow flag set
-BCS  | 0100 | c==1         | branch if carry flag set
-BEQ  | 0001 | z==1         | branch if equal
-BLTU | 0100 | c==1         | branch if uint <
-BGEU | 0101 | c==0 or z==1 | branch if uint >=
-BLT  | 0110 | v!=s         | branch if int <
-BGE  | 0111 | v==s or z==1 | branch if int >=
------+------+--------------+-----------------------------
+-----+------+------+-----------------------------
+cond | bits | test | description    
+-----+------+------+-----------------------------
+BR   | 0000 | true | branch always
+BZS  | 0001 | z==1 | branch if zero flag set
+BSS  | 0010 | s==1 | branch if sign flag set
+BVS  | 0011 | v==1 | branch if overflow flag set
+BCS  | 0100 | c==1 | branch if carry flag set
+BEQ  | 0001 | z==1 | branch if equal
+BLTU | 0100 | c==1 | branch if uint <
+BGEU | 0101 | c==0 | branch if uint >=
+BLT  | 0110 | v!=s | branch if int <
+BGE  | 0111 | v==s | branch if int >=
+-----+------+------+-----------------------------
 
 
 PUSH RA
